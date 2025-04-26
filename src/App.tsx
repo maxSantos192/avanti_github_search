@@ -1,38 +1,11 @@
-import { useState, FormEvent } from "react";
-import axios from "axios";
 import SearchForm from "./components/SearchForm";
 import ProfileCard from "./components/ProfileCard";
 import ErrorMessage from "./components/ErrorMessage";
-
-interface GithubProfile {
-  avatar_url: string;
-  name: string;
-  login: string;
-  bio: string;
-}
+import { useGithubProfile } from "./hooks/useGithubProfile";
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [profile, setProfile] = useState<GithubProfile | null>(null);
-  const [error, setError] = useState("");
-
-  const handleSearch = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!username) return;
-    try {
-      const response = await axios.get<GithubProfile>(
-        `https://api.github.com/users/${username}`,
-      );
-      setProfile(response.data);
-      setError("");
-    } catch (err) {
-      console.error(err);
-      setProfile(null);
-      setError(
-        "Nenhum perfil foi encontrado com esse nome de usuário. Tente novamente",
-      );
-    }
-  };
+  const { username, setUsername, profile, error, handleSearch } =
+    useGithubProfile();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[url('/src/assets/background.png')] bg-cover bg-center">
