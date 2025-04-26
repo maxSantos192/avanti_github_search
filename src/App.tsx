@@ -1,5 +1,8 @@
 import { useState, FormEvent } from "react";
 import axios from "axios";
+import SearchForm from "./components/SearchForm";
+import ProfileCard from "./components/ProfileCard";
+import ErrorMessage from "./components/ErrorMessage";
 
 interface GithubProfile {
   avatar_url: string;
@@ -40,52 +43,13 @@ function App() {
           alt="Github"
         />
 
-        <form
-          onSubmit={handleSearch}
-          className="flex w-full max-w-lg rounded-lg bg-white"
-        >
-          <input
-            className="flex-grow rounded-lg p-3 text-xl placeholder-black focus:outline-none"
-            type="text"
-            placeholder="Digite um usuário do Github"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="flex items-center justify-center rounded-md bg-blue-600 p-4 hover:bg-blue-700"
-          >
-            <img
-              src="/src/assets/search.svg"
-              alt="Search"
-              className="h-6 w-6"
-            />
-          </button>
-        </form>
-
-        {profile && (
-          <div className="mt-9 flex w-full max-w-[804px] items-center gap-6 rounded-lg bg-gray-200 p-6">
-            <img
-              src={profile.avatar_url}
-              alt={profile.name}
-              className="h-56 w-56 rounded-full border-[3px] border-blue-500 object-cover"
-            />
-            <div>
-              <h2 className="text-xl font-bold text-blue-600">
-                {profile.name || profile.login}
-              </h2>
-              <p className="text-gray-700">
-                {profile.bio || "Este usuário não possui uma bio."}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="mt-9 w-full max-w-[710px] rounded-lg bg-gray-200 p-6">
-            <p className="text-center text-red-600">{error}</p>
-          </div>
-        )}
+        <SearchForm
+          username={username}
+          setUsername={setUsername}
+          onSearch={handleSearch}
+        />
+        {profile && <ProfileCard profile={profile} />}
+        {error && <ErrorMessage message={error} />}
       </div>
     </div>
   );
